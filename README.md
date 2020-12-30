@@ -1,5 +1,7 @@
 # SALL2_conserved_network_analysis
 Analysis of SALL2 isoform specific ChIP-seq data
+
+- all datasets to replicate these analysis are available here: https://usegalaxy.org/u/carlosfarkas/h/sall2networkdatasets
 ```
 ###############################################
 ###############################################
