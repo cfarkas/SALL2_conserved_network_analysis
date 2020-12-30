@@ -7,11 +7,7 @@ Analysis of SALL2 isoform specific ChIP-seq data
 ###############################################
 ###############################################
 
-cd /mnt/sda1/
-mkdir SALL2_review
-cd /mnt/sda1/SALL2_review/
-mkdir Fig1
-cd /mnt/sda1/SALL2_review/Fig1/
+mkdir Fig1 && cd Fig1
 
 ##### Import RNA-seq quantification  #####
 
@@ -46,11 +42,7 @@ dev.off()
 #################################################################
 #################################################################
 
-cd /mnt/sda1/
-mkdir SALL2_review
-cd /mnt/sda1/SALL2_review/
-mkdir Fig2
-cd /mnt/sda1/SALL2_review/Fig2/
+mkdir Fig1 && cd Fig1
 
 ##### Import ChIP-seq quantification and GO terms #####
 
@@ -58,8 +50,6 @@ wget -O ENCODE-SALL2-eGFP-MAPPED_COORDINATES_hg19.bed https://usegalaxy.org/data
 wget -O GSM1306364_MGG8TPC.SALL2.bed https://usegalaxy.org/datasets/bbd44e69cb8906b59973e08722beb4ba/display?to_ext=bed
 wget -O GO_short_E1A_HEK293.tabular https://usegalaxy.org/datasets/bbd44e69cb8906b5f7c0b7bd67f405bd/display?to_ext=tabular
 wget -O GO_MGG8TPC.tabular https://usegalaxy.org/datasets/bbd44e69cb8906b554a7c1428ef1fb5a/display?to_ext=tabular
-
-conda deactivate
 
 ##### R enviroment #####
 R  
@@ -171,9 +161,7 @@ dev.off()
 ##########################################################################
 ##########################################################################
 
-cd /mnt/sda1/SALL2_review/
-mkdir Fig4
-cd /mnt/sda1/SALL2_review/Fig4/
+mkdir Fig4 && cd Fig4
 
 ##### Import ChIP-seq quantification and GO terms #####
 
@@ -183,7 +171,6 @@ wget -O GO_WT.tabular https://usegalaxy.org/datasets/bbd44e69cb8906b5ab65f56fc66
 wget -O GO_E1.tabular https://usegalaxy.org/datasets/bbd44e69cb8906b526a771b6bf68b31e/display?to_ext=tabular
 
 ##### R enviroment #####
-conda deactivate
 R
 
 ##### ChIPseeker Analysis #####
@@ -292,8 +279,6 @@ dev.off()
 #################################################
 #################################################
 
-cd /mnt/sda1/SALL2_review/Fig4/
-
 #### Using fastq-dump to download and recover fastq reads from SRA files. 
 
 prefetch --max-size 800G -O ./ SRR11184885  # WT-HEK293 
@@ -377,4 +362,3 @@ plotCorrelation -in E1_BigWig.npz --corMethod pearson --skipZeros --whatToPlot h
 # Spearman_BigWig_E1
 plotCorrelation -in E1_BigWig.npz --corMethod spearman --skipZeros --whatToPlot heatmap --colorMap RdYlBu --plotNumbers -o E1_SpearmanCorr_readCounts_BigWig.pdf --outFileCorMatrix E1_SpearmanCorr_readCounts_BigWig.tab --removeOutliers
 ```
-
