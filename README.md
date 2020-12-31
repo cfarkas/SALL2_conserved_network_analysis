@@ -1,12 +1,14 @@
 # SALL2_conserved_network_analysis
 Analysis of SALL2 isoform specific ChIP-seq data
 
+- This repository contains code to replicate ChIP-seq analysis of SALL2 transcription factor in wild type HEK293 cells. We also considered the analysis of SALL2 E1-isoforms by using E1A-knockout with CRISPR-Cas9. We benchmarked these ChIP-seq with publicly available data consisting in ChIP-seq of SALL2 nonspecific isoforms in tumor propagating glioblastoma stem-like cells (GEO: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE54047, sample GSM1306364) and ENCODE FactorBook SALL2 entry : https://www.encodeproject.org/experiments/ENCSR044FMM/, assaying a short SALL2 isoform controlling by the E1A promoter, see https://www.encodeproject.org/genetic-modifications/ENCGM075NMI/ and  http://horfdb.dfci.harvard.edu/hv7/index.php?page=getresults&by=detail&qury=1683, for details. 
 - all datasets to replicate these analysis are available here: https://usegalaxy.org/u/carlosfarkas/h/sall2networkdatasets
+
+## Requirements:
+
 ```
 ###############################################
-###############################################
 ### Isoform Expression, related to Figure 1 ###
-###############################################
 ###############################################
 
 mkdir Fig1 && cd Fig1
@@ -22,7 +24,9 @@ R
 library(dplyr)
 #install.packages("tidyverse")
 library(tidyverse)
+#install.packages("ggplot2")
 require(ggplot2)
+#install.packages("gridExtra")
 require(gridExtra)
 data1<-read.table("SALL2_normal_tumor.isoforms", header = TRUE, sep = "\t", row.names=1)
 data2<-as.matrix(data1)
@@ -30,8 +34,9 @@ dim(data2)
 
 breaksList = seq(0, 30, by = 0.01)
 
-# install.packages("pheatmap")
+#install.packages("pheatmap")
 library(pheatmap)
+#install.packages("RColorBrewer")
 library("RColorBrewer")
 pdf("SALL2_Isoform_Expression.pdf", width=10, height=10)
 plot2<-pheatmap(data2, main="SALL2 Isoform Expression", cluster_rows=TRUE, cluster_cols=FALSE, show_colnames=TRUE, fontsize=10.5, border_color=NA, cellwidth=30, cellheight=15, color = colorRampPalette(rev(brewer.pal(n = 7, name = "RdYlBu")))(length(breaksList)), breaks = breaksList)  
@@ -39,12 +44,10 @@ dev.off()
 ```
 ```
 #################################################################
-#################################################################
 #### ChIPseeker Analysis: GBM vs ENCODE, related to Figure 2 ####
 #################################################################
-#################################################################
 
-mkdir Fig1 && cd Fig1
+mkdir Fig2 && cd Fig2
 
 ##### Import ChIP-seq quantification and GO terms #####
 
@@ -118,7 +121,9 @@ dev.off()
 
 #### Plotting GO terms ####
 
+#install.packages("ggplot2")
 require(ggplot2)
+#install.packages("gridExtra")
 require(gridExtra)
 
 data1<-read.table("GO_short_E1A_HEK293.tabular", header = TRUE, sep = "\t", row.names=1)
@@ -134,7 +139,9 @@ names(data1.1)[names(data1.1) == "negative_log10_of_adjusted_p_value"] <- "-log1
 
 breaksList = seq(0, 15, by = 0.001)
 
+#install.packages("pheatmap")
 library(pheatmap)
+#install.packages("RColorBrewer")
 library("RColorBrewer")
 pdf("GO_ENCODE.pdf", width=6, height=3)
 plot1<-pheatmap(data1.1, main="short_E1A HEK293", cluster_rows=FALSE, cluster_cols=FALSE, show_colnames=TRUE, fontsize=10.5, border_color=NA, cellwidth=25, cellheight=40, color = colorRampPalette(rev(brewer.pal(n = 7, name = "RdYlBu")))(length(breaksList)), breaks = breaksList) 
@@ -158,12 +165,10 @@ dev.off()
 ```
 ```
 ##########################################################################
-##########################################################################
-#### ChIPseeker Analysis: WT vs E1A-KO in HEK293, related to Figure 4 ####
-##########################################################################
+#### ChIPseeker Analysis: WT vs E1A-KO in HEK293, related to Figure 3 ####
 ##########################################################################
 
-mkdir Fig4 && cd Fig4
+mkdir Fig3 && cd Fig3
 
 ##### Import ChIP-seq quantification and GO terms #####
 
@@ -252,7 +257,9 @@ names(data1.1)[names(data1.1) == "negative_log10_of_adjusted_p_value"] <- "-log1
 
 breaksList = seq(0, 15, by = 0.01)
 
+#install.packages("pheatmap")
 library(pheatmap)
+#install.packages("RColorBrewer")
 library("RColorBrewer")
 pdf("GO_WT_HEK293.pdf", width=9, height=9)
 plot1<-pheatmap(data1.1, cluster_rows=FALSE, cluster_cols=FALSE, show_colnames=TRUE, fontsize=10.5, border_color=NA, cellwidth=25, cellheight=13, color = colorRampPalette(rev(brewer.pal(n = 7, name = "RdYlBu")))(length(breaksList)), breaks = breaksList)
@@ -276,9 +283,7 @@ dev.off()
 ```
 ```
 #################################################
-#################################################
-### ChIP-seq correlation, related to Figure 4 ###
-#################################################
+### ChIP-seq correlation, related to Figure 3 ###
 #################################################
 
 #### Using fastq-dump to download and recover fastq reads from SRA files. 
@@ -354,13 +359,9 @@ multiBigwigSummary BED-file --BED MACS2_callpeak_WT_p_0.005.bed --bwfiles WT-HEK
 
 multiBigwigSummary BED-file --BED MACS2_callpeak_E1_p_0.005.bed --bwfiles WT-HEK293.bw E1-HEK293.bw H3K4me3_rep1_ENCODE.bw H3K4me3_rep2_ENCODE.bw H3K27me3.bw H3K27ac.bw H3K27ac_rep1_ENCODE.bw H3K27ac_rep2_ENCODE.bw --labels WT-HEK293 E1-HEK293 H3K4me3_rep1_ENCODE H3K4me3_rep2_ENCODE H3K27me3 H3K27ac H3K27ac_rep1_ENCODE H3K27ac_rep2_ENCODE --numberOfProcessors 55 --binSize 50 -o E1_BigWig.npz
 
-# Pearson_BigWig_WT
-plotCorrelation -in WT_BigWig.npz --corMethod pearson --skipZeros --whatToPlot heatmap --colorMap RdYlBu --plotNumbers -o WT_PearsonCorr_readCounts_BigWig.pdf --outFileCorMatrix WT_PearsonCorr_readCounts_BigWig.tab --removeOutliers
-# Spearman_BigWig_E1
+# Spearman_BigWig_E1 correlation
 plotCorrelation -in WT_BigWig.npz --corMethod spearman --skipZeros --whatToPlot heatmap --colorMap RdYlBu --plotNumbers -o WT_SpearmanCorr_readCounts_BigWig.pdf --outFileCorMatrix WT_SpearmanCorr_readCounts_BigWig.tab --removeOutliers
 
-# Pearson_BigWig_E1
-plotCorrelation -in E1_BigWig.npz --corMethod pearson --skipZeros --whatToPlot heatmap --colorMap RdYlBu --plotNumbers -o E1_PearsonCorr_readCounts_BigWig.pdf --outFileCorMatrix E1_PearsonCorr_readCounts_BigWig.tab --removeOutliers
-# Spearman_BigWig_E1
+# Spearman_BigWig_E1 correlation
 plotCorrelation -in E1_BigWig.npz --corMethod spearman --skipZeros --whatToPlot heatmap --colorMap RdYlBu --plotNumbers -o E1_SpearmanCorr_readCounts_BigWig.pdf --outFileCorMatrix E1_SpearmanCorr_readCounts_BigWig.tab --removeOutliers
 ```
