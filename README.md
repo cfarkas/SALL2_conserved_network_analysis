@@ -475,7 +475,7 @@ plotCorrelation -in WT_BigWig.npz --corMethod spearman --skipZeros --whatToPlot 
 plotCorrelation -in E1_BigWig.npz --corMethod spearman --skipZeros --whatToPlot heatmap --colorMap RdYlBu --plotNumbers -o E1_SpearmanCorr_readCounts_BigWig.pdf --outFileCorMatrix E1_SpearmanCorr_readCounts_BigWig.tab --removeOutliers
 ```
 
-### Call peaks from SALL2 ChIP-seq in HEK293 using SRR11184887 (HEK293 SALL2 KO) as control:
+### Calling peaks from SALL2 ChIP-seq in HEK293 using SRR11184887 (HEK293 SALL2 KO) as control:
 ```
 macs2 callpeak -t SRR11184885.bam -c SRR11184887.bam -f BAM -m 5 50 --gsize 2700000000 --call-summits --bw 300 --pvalue 0.005 --name WT_HEK293
 macs2 callpeak -t SRR11184886.bam -c SRR11184887.bam -f BAM -m 5 50 --gsize 2700000000 --call-summits --bw 300 --pvalue 0.005 --name E1_HEK293
