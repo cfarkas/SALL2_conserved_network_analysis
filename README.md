@@ -6,6 +6,110 @@ Analysis of SALL2 isoform specific ChIP-seq data
 
 ## Requirements:
 
+### 1) Installing minimap2 aligner (for install details, please see: https://github.com/lh3/minimap2)
+```
+### Installing minimap2
+git clone https://github.com/lh3/minimap2
+# build minimap2
+cd minimap2 && make
+# with sudo privileges
+sudo cp minimap2 /usr/local/bin/
+```
+
+### 2) Installing fastp: An ultra-fast all-in-one FASTQ preprocessor (for details, please see: https://github.com/OpenGene/fastp)
+```
+git clone https://github.com/OpenGene/fastp.git
+# build fastp
+cd fastp
+make
+# with sudo privileges
+sudo cp fastp /usr/local/bin/
+```
+### 3) Obtaining and installing up-to-date SAMtools with htslib (version >= 1.9)
+(Old samtools version can also work). Users need to install version up to date of these three packages. Users can first install htslib v1.9 and then samtools with bcftools v1.9, respectively. For downloading these packages, see http://www.htslib.org/download/). The latter can be accomplished by downloading the three packages, decompressing it, and doing the following:
+```
+wget https://github.com/samtools/htslib/releases/download/1.10.2/htslib-1.10.2.tar.bz2
+bzip2 -d htslib-1.10.2.tar.bz2
+tar -xvf htslib-1.10.2.tar
+rm htslib-1.10.2.tar
+cd htslib-1.10.2    # and similarly for samtools
+sudo ./configure --prefix=/usr/local/bin
+sudo make
+sudo make install
+# this step is only for samtools
+sudo cp samtools /usr/local/bin/
+
+# Similarly as htslib, samtools and bcftools can be downloaded as follows:
+
+wget https://github.com/samtools/samtools/releases/download/1.10/samtools-1.10.tar.bz2
+wget https://github.com/samtools/bcftools/releases/download/1.10.2/bcftools-1.10.2.tar.bz2
+```
+
+Then in a terminal type
+>samtools
+
+to check 1.10 version (using htslib v1.10)
+
+### 4) Obtaining and installing R (>=3.2.0) and related libraries
+See https://cran.r-project.org/sources.html for R installation in linux/ubuntu and windows. R version 3.2.3 comes from default in Ubuntu 16.04 LTS but users with older Ubuntu distributions must upgrade R. A way accomplish this can be the following:
+```
+# Removing R from system
+sudo apt-get remove r-base-core
+
+# Editing sources.list 
+sudo su
+echo "deb https://cloud.r-project.org/bin/linux/ubuntu xenial-cran35/" >> /etc/apt/sources.list
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
+
+# Installing R (version 3.6.0)
+sudo apt update; sudo apt install r-base
+exit
+R
+```
+
+The following R packages need to be installed in R (macOS/ubuntu). These can be installed by opening R and typying:
+```
+install.packages("dplyr")
+install.packages("tidyverse")
+install.packages("ggplot2")
+install.packages("gridExtra")
+install.packages("pheatmap")
+install.packages("RColorBrewer")
+```
+The following Bioconductor R packages need to be installed in R (macOS/ubuntu). These can be installed by opening R and typying:
+```
+if (!requireNamespace("BiocManager", quietly = TRUE))
+   install.packages("BiocManager")
+BiocManager::install("ChIPseeker")
+BiocManager::install("TxDb.Hsapiens.UCSC.hg19.knownGene")
+```
+### 5) Installing deeptools. For more information, visit https://deeptools.readthedocs.io/en/develop/content/installation.html
+via conda: 
+```
+conda install -c bioconda deeptools
+```
+via pip:
+```
+pip install deeptools
+```
+specifiyng a path before doing pip
+```
+pip install --install-option="--prefix=/MyPath/Tools/deepTools2.0" git+https://github.com/deeptools/deepTools.git
+```
+
+### 6) Installing MACS2
+via conda:
+```
+conda install -c bioconda macs2
+```
+via pip:
+```
+pip install MACS2
+```
+
+## Codes
+
+### Plotting SALL2 isoform expression, related to Figure 1: 
 ```
 ###############################################
 ### Isoform Expression, related to Figure 1 ###
@@ -17,7 +121,7 @@ mkdir Fig1 && cd Fig1
 
 wget -O SALL2_normal_tumor.isoforms https://usegalaxy.org/datasets/bbd44e69cb8906b53c31efa2219fa05e/display?to_ext=tabular
 
-##### R enviroment #####
+##### Open R enviroment #####
 R 
 
 #install.packages("dplyr")
@@ -42,9 +146,11 @@ pdf("SALL2_Isoform_Expression.pdf", width=10, height=10)
 plot2<-pheatmap(data2, main="SALL2 Isoform Expression", cluster_rows=TRUE, cluster_cols=FALSE, show_colnames=TRUE, fontsize=10.5, border_color=NA, cellwidth=30, cellheight=15, color = colorRampPalette(rev(brewer.pal(n = 7, name = "RdYlBu")))(length(breaksList)), breaks = breaksList)  
 dev.off()
 ```
+
+### Annotating publicly available SALL2 ChIP-seq BED files with ChIPseeker package, related to Figure 2: 
 ```
 #################################################################
-#### ChIPseeker Analysis: GBM vs ENCODE, related to Figure 2 ####
+#### ChIPseeker Analysis: MGG8TPC vs ENCODE, related to Figure 2 ####
 #################################################################
 
 mkdir Fig2 && cd Fig2
@@ -163,6 +269,8 @@ plot2<-pheatmap(data2.1, main="MGG8TPC", cluster_rows=FALSE, cluster_cols=FALSE,
 dev.off()
 ###
 ```
+
+### Annotating in-house SALL2 ChIP-seq BED files with ChIPseeker package, related to Figure 3: 
 ```
 ##########################################################################
 #### ChIPseeker Analysis: WT vs E1A-KO in HEK293, related to Figure 3 ####
@@ -281,6 +389,7 @@ plot2<-pheatmap(data2.1, cluster_rows=FALSE, cluster_cols=FALSE, show_colnames=T
 dev.off()
 ###
 ```
+### Correlating SALL2 ChIP-seq datasets with different histone marks in HEK293, using deeptools package: 
 ```
 #################################################
 ### ChIP-seq correlation, related to Figure 3 ###
@@ -364,4 +473,10 @@ plotCorrelation -in WT_BigWig.npz --corMethod spearman --skipZeros --whatToPlot 
 
 # Spearman_BigWig_E1 correlation
 plotCorrelation -in E1_BigWig.npz --corMethod spearman --skipZeros --whatToPlot heatmap --colorMap RdYlBu --plotNumbers -o E1_SpearmanCorr_readCounts_BigWig.pdf --outFileCorMatrix E1_SpearmanCorr_readCounts_BigWig.tab --removeOutliers
+```
+
+### Call peaks from SALL2 ChIP-seq in HEK293 using SRR11184887 (HEK293 SALL2 KO) as control:
+```
+macs2 callpeak -t SRR11184885.bam -c SRR11184887.bam -f BAM -m 5 50 --gsize 2700000000 --call-summits --bw 300 --pvalue 0.005 --name WT_HEK293
+macs2 callpeak -t SRR11184886.bam -c SRR11184887.bam -f BAM -m 5 50 --gsize 2700000000 --call-summits --bw 300 --pvalue 0.005 --name E1_HEK293
 ```
