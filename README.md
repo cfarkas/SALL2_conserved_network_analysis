@@ -477,6 +477,9 @@ plotCorrelation -in E1_BigWig.npz --corMethod spearman --skipZeros --whatToPlot 
 
 ### Calling peaks from SALL2 ChIP-seq in HEK293 using HEK293 SALL2 KO as control (SRR11184887):
 ```
-macs2 callpeak -t SRR11184885.bam -c SRR11184887.bam -f BAM -m 5 50 --gsize 2700000000 --call-summits --bw 300 --pvalue 0.005 --name WT_HEK293
-macs2 callpeak -t SRR11184886.bam -c SRR11184887.bam -f BAM -m 5 50 --gsize 2700000000 --call-summits --bw 300 --pvalue 0.005 --name E1_HEK293
+samtools view -q 20 -b SRR11184885.bam > SRR11184885.q20.bam
+samtools view -q 20 -b SRR11184886.bam > SRR11184886.q20.bam
+samtools view -q 20 -b SRR11184887.bam > SRR11184887.q20.bam
+macs2 callpeak -t SRR11184885.q20.bam -c SRR11184887.q20.bam -f BAM -m 5 50 --gsize 2700000000 --call-summits --bw 300 --pvalue 0.005 --name WT_HEK293
+macs2 callpeak -t SRR11184886.q20.bam -c SRR11184887.q20.bam -f BAM -m 5 50 --gsize 2700000000 --call-summits --bw 300 --pvalue 0.005 --name E1_HEK293
 ```
