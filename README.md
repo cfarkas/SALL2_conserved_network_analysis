@@ -147,6 +147,38 @@ plot2<-pheatmap(data2, main="SALL2 Isoform Expression", cluster_rows=TRUE, clust
 dev.off()
 ```
 
+### Parsing GTEx data (https://gtexportal.org/home/datasets) to obtain SALL2 Transcript per Million values (TPM) in normal tissues, related to Figure 1:
+```
+### Download GTEx Raw data
+wget https://storage.googleapis.com/gtex_analysis_v8/rna_seq_data/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_tpm.gct.gz
+gunzip GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_tpm.gct.gz
+
+### Extract SALL2 counts and generate SALL2.GTEx
+grep "SALL2" GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_tpm.gct > GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_tpm.gct.SALL2
+grep "Name" GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_tpm.gct > GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_tpm.gct.header
+cat GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_tpm.gct.header GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_tpm.gct.SALL2 > SALL2.GTex
+rm GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_tpm.gct.header
+rm GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_tpm.gct.SALL2
+
+### Transpose SALL2.GTEx to join with GTEx metadata
+wget https://storage.googleapis.com/gtex_analysis_v8/rna_seq_data/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_median_tpm.gct.gz
+gunzip GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_median_tpm.gct.gz
+python -c "import sys; print('\n'.join(' '.join(c) for c in zip(*(l.split() for l in sys.stdin.readlines() if l.strip()))))" < SALL2.GTex > SALL2.transpose.counts
+sed -i 's/ /\t/'g SALL2.transpose.counts
+
+### Getting GTEx metadata (Tissue and Sample name) and construct table 
+wget -O GTEx.metadata https://usegalaxy.org/datasets/bbd44e69cb8906b5fc4df1b60b63c0b9/display?to_ext=tabular
+sed -i 's/-SM/\t/'g SALL2.transpose.counts
+join -j 1 <(sort SALL2.transpose.counts) <(sort GTEx.metadata) > SALL2.metadata && rm SALL2.transpose.counts && sed -i 's/ /\t/'g SALL2.metadata
+awk '{print $4"\t"$1"\t"$2"\t"$3}' SALL2.metadata > SALL2.normal.tpm
+sort -k1 SALL2.normal.tpm > SALL2.normal.sorted.tpm
+```
+SALL2.metadata and SALL2.normal.sorted.tpm (file alphabetically sorted) contain sample names and SALL2 TPM values matched with metadata (tissue), as follows:
+```
+Tissue   Sample name Prefix   TPM
+Adipose GTEX-1117F-0226 -5GZZ7  4.728
+```
+
 ### Annotating publicly available SALL2 ChIP-seq BED files with ChIPseeker package, related to Figure 2: 
 ```
 #################################################################
