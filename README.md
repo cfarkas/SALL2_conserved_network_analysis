@@ -1,7 +1,8 @@
 # SALL2_conserved_network_analysis
-Analysis of SALL2 isoform specific ChIP-seq data
+Analysis of SALL2 isoform-specific ChIP-seq data
 
-- This repository contains code to replicate ChIP-seq analysis of SALL2 transcription factor in wild type HEK293 cells. We also considered the analysis of SALL2 E1-isoforms by using E1A-knockout with CRISPR-Cas9. We benchmarked these ChIP-seq with publicly available data consisting in ChIP-seq of SALL2 nonspecific isoforms in tumor propagating glioblastoma stem-like cells (GEO: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE54047, sample GSM1306364) and ENCODE FactorBook SALL2 entry : https://www.encodeproject.org/experiments/ENCSR044FMM/, assaying a short SALL2 isoform controlling by the E1A promoter, see https://www.encodeproject.org/genetic-modifications/ENCGM075NMI/ and  http://horfdb.dfci.harvard.edu/hv7/index.php?page=getresults&by=detail&qury=1683, for details. 
+- This repository contains code to replicate ChIP-seq analysis of SALL2 transcription factor in wild type HEK293 cells. We also considered the analysis of SALL2 E1-isoforms by using E1A-knockout with CRISPR-Cas9. We benchmarked these ChIP-seq with publicly available data consisting in ChIP-seq of SALL2 nonspecific isoforms in tumor propagating glioblastoma stem-like cells (GEO: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE54047, sample GSM1306364) and ENCODE FactorBook SALL2 entry : https://www.encodeproject.org/experiments/ENCSR044FMM/ (GEO:GSE105193), assaying a short SALL2 isoform controlling by the E1A promoter, 
+- for details of short SALL2 isoform ChIP-seq, see https://www.encodeproject.org/genetic-modifications/ENCGM075NMI/ and  http://horfdb.dfci.harvard.edu/hv7/index.php?page=getresults&by=detail&qury=1683. 
 - all datasets to replicate these analysis are available here: https://usegalaxy.org/u/carlosfarkas/h/sall2networkdatasets
 
 ## Requirements:
@@ -181,9 +182,9 @@ Adipose GTEX-1117F-0226 -5GZZ7  4.728
 
 ### Annotating publicly available SALL2 ChIP-seq BED files with ChIPseeker package, related to Figure 2: 
 ```
-#################################################################
+#####################################################################
 #### ChIPseeker Analysis: MGG8TPC vs ENCODE, related to Figure 2 ####
-#################################################################
+#####################################################################
 
 mkdir Fig2 && cd Fig2
 
@@ -421,7 +422,7 @@ plot2<-pheatmap(data2.1, cluster_rows=FALSE, cluster_cols=FALSE, show_colnames=T
 dev.off()
 ###
 ```
-### Correlating SALL2 ChIP-seq datasets with different histone marks in HEK293, using deeptools package: 
+### Correlating SALL2 ChIP-seq datasets with different histone marks in HEK293, using deeptools package, related to Figure 3: 
 ```
 #################################################
 ### ChIP-seq correlation, related to Figure 3 ###
