@@ -110,7 +110,7 @@ pip install MACS2
 
 ## Codes
 
-### Plotting SALL2 isoform expression, related to Figure 1: 
+### (1) Plotting SALL2 isoform expression, related to Figure 1: 
 ```
 ###############################################
 ### Isoform Expression, related to Figure 1 ###
@@ -148,7 +148,7 @@ plot2<-pheatmap(data2, main="SALL2 Isoform Expression", cluster_rows=TRUE, clust
 dev.off()
 ```
 
-### Parsing GTEx data (https://gtexportal.org/home/datasets) to obtain SALL2 Transcript per Million values (TPM) in normal tissues, related to Figure 1:
+### (2) Parsing GTEx data (https://gtexportal.org/home/datasets) to obtain SALL2 Transcript per Million values (TPM) in normal tissues, related to Figure 1:
 ```
 ### Download GTEx Raw data
 wget https://storage.googleapis.com/gtex_analysis_v8/rna_seq_data/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_tpm.gct.gz
@@ -180,7 +180,7 @@ Tissue   Sample name Prefix   TPM
 Adipose GTEX-1117F-0226 -5GZZ7  4.728
 ```
 
-### Annotating publicly available SALL2 ChIP-seq BED files with ChIPseeker package, related to Figure 2: 
+### (3) Annotating publicly available SALL2 ChIP-seq BED files with ChIPseeker package, related to Figure 2: 
 ```
 #####################################################################
 #### ChIPseeker Analysis: MGG8TPC vs ENCODE, related to Figure 2 ####
@@ -303,7 +303,7 @@ dev.off()
 ###
 ```
 
-### Annotating in-house SALL2 ChIP-seq BED files with ChIPseeker package, related to Figure 3: 
+### (4) Annotating in-house SALL2 ChIP-seq BED files with ChIPseeker package, related to Figure 3: 
 ```
 ##########################################################################
 #### ChIPseeker Analysis: WT vs E1A-KO in HEK293, related to Figure 3 ####
@@ -422,7 +422,7 @@ plot2<-pheatmap(data2.1, cluster_rows=FALSE, cluster_cols=FALSE, show_colnames=T
 dev.off()
 ###
 ```
-### Correlating SALL2 ChIP-seq datasets with different histone marks in HEK293, using deeptools package, related to Figure 3: 
+### (5) Correlating SALL2 ChIP-seq datasets with different histone marks in HEK293, using deeptools package, related to Figure 3: 
 ```
 #################################################
 ### ChIP-seq correlation, related to Figure 3 ###
@@ -508,7 +508,7 @@ plotCorrelation -in WT_BigWig.npz --corMethod spearman --skipZeros --whatToPlot 
 plotCorrelation -in E1_BigWig.npz --corMethod spearman --skipZeros --whatToPlot heatmap --colorMap RdYlBu --plotNumbers -o E1_SpearmanCorr_readCounts_BigWig.pdf --outFileCorMatrix E1_SpearmanCorr_readCounts_BigWig.tab --removeOutliers
 ```
 
-### Calling peaks from SALL2 ChIP-seq in HEK293 using HEK293 SALL2 KO as control (SRR11184887):
+### (6) Calling peaks from SALL2 ChIP-seq in HEK293 using HEK293 SALL2 KO as control (SRR11184887):
 ```
 macs2 callpeak -t SRR11184885.bam -c SRR11184887.bam -f BAM -m 5 50 --gsize 2700000000 --call-summits --bw 300 --pvalue 0.005 --extsize 151 --name WT_HEK293
 macs2 callpeak -t SRR11184886.bam -c SRR11184887.bam -f BAM -m 5 50 --gsize 2700000000 --call-summits --bw 300 --pvalue 0.005 --extsize 151 --name E1_HEK293
