@@ -1,7 +1,8 @@
 # SALL2_conserved_network_analysis
 Analysis of SALL2 isoform-specific ChIP-seq data
 
-- This repository contains code to replicate ChIP-seq analysis of SALL2 transcription factor in wild type HEK293 cells. We also considered the analysis of SALL2 E1-isoforms by using E1A-knockout with CRISPR-Cas9. We benchmarked these ChIP-seq with publicly available data consisting in ChIP-seq of SALL2 nonspecific isoforms in tumor propagating glioblastoma stem-like cells (GEO: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE54047, sample GSM1306364) and ENCODE FactorBook SALL2 entry : https://www.encodeproject.org/experiments/ENCSR044FMM/ (GEO:GSE105193), assaying a short SALL2 isoform controlling by the E1A promoter. 
+- This repository contains code to replicate ChIP-seq analysis of SALL2 transcription factor in wild type HEK293 cells, including the analysis of SALL2 E1-isoforms by using E1A-knockout with CRISPR-Cas9 as depicted here: https://www.frontiersin.org/articles/10.3389/fgene.2021.613808/full.
+- We benchmarked these ChIP-seq with publicly available data consisting in ChIP-seq of SALL2 nonspecific isoforms in tumor propagating glioblastoma stem-like cells (GEO: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE54047, sample GSM1306364) and ENCODE FactorBook SALL2 entry: https://www.encodeproject.org/experiments/ENCSR044FMM/ (GEO:GSE105193), assaying a short SALL2 isoform controlling by the E1A promoter. 
 - for details of short SALL2 isoform assayed by ENCODE in ChIP-seq, see https://www.encodeproject.org/genetic-modifications/ENCGM075NMI/ and  http://horfdb.dfci.harvard.edu/hv7/index.php?page=getresults&by=detail&qury=1683. 
 - all datasets to replicate these analysis are available here: https://usegalaxy.org/u/carlosfarkas/h/sall2networkdatasets
 
